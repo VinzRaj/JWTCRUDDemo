@@ -1,13 +1,17 @@
 import React from 'react';
 import { useState } from 'react';
 import validator from 'validator';
-import axios from 'axios';
+import { Link } from 'react-router-dom';
+import { AppContext } from '../appContext';
+import { useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export const Register = () => {
+  const { setToken } = useContext(AppContext);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
+  const navigate = useNavigate();
   // Handling the name change
   const handleName = (e) => {
     setName(e.target.value);
@@ -26,6 +30,7 @@ export const Register = () => {
   // Handling the form submission
   const handleSubmit = (e) => {
     if (name && password && email && validator.isEmail(email)) {
+      debugger;
       saveToDB();
       //apicall();
     } else {
@@ -33,15 +38,6 @@ export const Register = () => {
     }
     e.preventDefault();
   };
-
-  const apicall = () => {
-    fetch('/api/v1/auth/data')
-      .then((res) => res.json())
-      .then((res) => {
-        console.log(res);
-      });
-  };
-
   const saveToDB = () => {
     const options = {
       method: 'POST',
@@ -64,14 +60,26 @@ export const Register = () => {
             status: response.status,
           }))
           .then((res) => {
-            console.log(res.data);
+            debugger;
+            setToken(res.data.token);
+            console.log(res.data.token);
+            navigate('/home');
           })
     );
+  };
+
+  const apicall = () => {
+    fetch('/api/v1/auth/data')
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res);
+      });
   };
 
   return (
     <div>
       <h3>Registeration form</h3>
+
       <form>
         {/* Labels and inputs for form data */}
         <label className='label'>Name</label>
@@ -81,7 +89,6 @@ export const Register = () => {
           value={name}
           type='text'
         />
-
         <label className='label'>Email</label>
         <input
           onChange={handleEmail}
@@ -89,7 +96,6 @@ export const Register = () => {
           value={email}
           type='email'
         />
-
         <label className='label'>Password</label>
         <input
           onChange={handlePassword}
@@ -101,6 +107,11 @@ export const Register = () => {
         <button onClick={handleSubmit} className='btn' type='submit'>
           Submit
         </button>
+
+        <p>
+          If you are already a member,
+          <Link to={'./login'}>Click here to Login</Link>
+        </p>
       </form>
     </div>
   );

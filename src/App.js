@@ -1,17 +1,17 @@
-import { Home } from './pages/homepage';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Login } from './pages/loginpage';
 import { Register } from './pages/registerpage';
-  //"proxy": "http://localhost:5000",
+import { Home } from './pages/homepage';
+//"proxy": "http://localhost:5000",
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path='/' element={<Home />} />
-        <Route index element={<Home />} />
+        <Route path='/' element={<Register />} />
+        <Route index element={<Register />} />
         <Route path='login' element={<Login />} />
-        <Route path='register' element={<Register />} />
+        <Route path='home' element={<Home />} />
       </Routes>
     </Router>
   );
